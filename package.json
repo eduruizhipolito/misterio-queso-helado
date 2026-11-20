@@ -1,0 +1,31 @@
+{
+  "name": "misterio-queso-helado",
+  "private": true,
+  "description": "El Misterio del Queso Helado: un taller para aprender Stellar/Soroban resolviendo un caso en testnet",
+  "type": "module",
+  "packageManager": "pnpm@10.17.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "setup:account": "node scripts/setup-account.mjs",
+    "detective:test": "cargo test -p detective -- --nocapture",
+    "detective:ship": "node scripts/detective.mjs ship",
+    "detective:ficha": "node scripts/detective.mjs ficha",
+    "detective:cumbre": "node scripts/detective.mjs cumbre",
+    "caso:registrar": "node scripts/caso.mjs registrar",
+    "caso:sospechosos": "node scripts/caso.mjs sospechosos",
+    "caso:pistas": "node scripts/caso.mjs pistas",
+    "caso:pista": "node scripts/caso.mjs pista",
+    "caso:interrogar": "node scripts/caso.mjs interrogar",
+    "caso:acusar": "node scripts/caso.mjs acusar",
+    "caso:estado": "node scripts/caso.mjs estado",
+    "caso:ranking": "node scripts/caso.mjs ranking",
+    "admin:deploy": "node scripts/admin.mjs deploy",
+    "admin:cargar": "node scripts/admin.mjs cargar",
+    "admin:revelar": "node scripts/admin.mjs revelar",
+    "tablero": "node scripts/tablero.mjs",
+    "test": "cargo test"
+  }
+}

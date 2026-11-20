@@ -1,0 +1,10 @@
+/target
+node_modules
+.caso/
+.env
+*.log
+# Diseño completo del caso (incluye la solución): se queda solo en la compu del facilitador
+docs/diseno-caso.md
+docs/privado/
+test_snapshots/
+.claude/

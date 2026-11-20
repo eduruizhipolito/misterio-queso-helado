@@ -1,0 +1,26 @@
+{
+  "name": "El Misterio del Queso Helado",
+  "build": { "dockerfile": "Dockerfile" },
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22",
+      "pnpmVersion": "10.17.1"
+    }
+  },
+  "hostRequirements": { "cpus": 4 },
+  "forwardPorts": [5173],
+  "portsAttributes": { "5173": { "label": "Tablero del caso" } },
+  "postCreateCommand": "pnpm install && cargo test -p detective --no-run && stellar contract build --package detective && (pnpm check || true)",
+  "customizations": {
+    "vscode": {
+      "extensions": ["rust-lang.rust-analyzer", "tamasfe.even-better-toml"],
+      "settings": {
+        "rust-analyzer.cargo.allTargets": false
+      },
+      "openFiles": ["contracts/detective/src/lib.rs"]
+    },
+    "codespaces": {
+      "openFiles": ["contracts/detective/src/lib.rs"]
+    }
+  }
+}

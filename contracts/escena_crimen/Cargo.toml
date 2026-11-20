@@ -1,0 +1,20 @@
+[package]
+name = "escena_crimen"
+description = "Contrato central del facilitador: la Escena del Crimen"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["lib", "cdylib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
+detective = { workspace = true }
+
+[lints]
+workspace = true

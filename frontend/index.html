@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ranking del Queso Helado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fbf6ec;
+      --card: #ffffff;
+      --ink: #2b2118;
+      --muted: #7a6a58;
+      --accent: #c2410c;
+      --ok: #15803d;
+      --line: #eadfcb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1b1612;
+        --card: #261f19;
+        --ink: #f5ece0;
+        --muted: #b3a491;
+        --accent: #fb923c;
+        --ok: #4ade80;
+        --line: #3a3027;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.5 Inter, system-ui, sans-serif;
+    }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 16px 48px; }
+    h1 { font-family: Fraunces, Georgia, serif; font-size: clamp(28px, 6vw, 48px); margin: 0; line-height: 1.1; }
+    .sub { color: var(--muted); margin: 8px 0 24px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 8px 0; }
+    .row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 14px 20px; border-top: 1px solid var(--line); }
+    .row:first-child { border-top: 0; }
+    .pos { font-size: 28px; text-align: center; }
+    .name { font-weight: 600; font-size: 20px; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .tag { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .t1 { color: var(--ok); }
+    .t2 { color: var(--accent); }
+    .empty { padding: 32px 20px; text-align: center; color: var(--muted); }
+    .banner { margin: 0 0 20px; padding: 14px 18px; border-radius: 12px; background: var(--accent); color: #fff; font-weight: 600; }
+    footer { color: var(--muted); font-size: 13px; margin-top: 20px; }
+    code { font-size: 12px; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🧀 El Misterio del Queso Helado</h1>
+    <p class="sub">Ranking de detectives · Picantería Doña Nieves · Stellar testnet</p>
+    <div id="banner"></div>
+    <div class="card" id="ranking"><div class="empty">Leyendo la escena del crimen…</div></div>
+    <footer>
+      <p>Este tablero solo hace <strong>LECTURAS</strong>: simula <code>ranking()</code> en un nodo Stellar RPC cada 5 segundos. No firma, no paga fee, no cambia nada.</p>
+      <p>Contrato: <code id="cid">…</code> · <span id="hora"></span></p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@stellar/stellar-sdk@17.4.0/dist/stellar-sdk.min.js"></script>
+  <script>
+    const TESTNET = "Test SDF Network ; September 2015";
+    const NOMBRES = { rocoto: "Don Rocoto", chicha: "La Tía Chicha", adobo: "El Cholo Adobo", nevado: "Misti Nevado", ocopa: "La Sobrina Ocopa" };
+    const { rpc, Contract, TransactionBuilder, Account, BASE_FEE, scValToNative } = StellarSdk;
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
+
+    let cfg, server;
+
+    async function leer(fn) {
+      const tx = new TransactionBuilder(new Account(cfg.admin, "0"), { fee: BASE_FEE, networkPassphrase: cfg.networkPassphrase })
+        .addOperation(new Contract(cfg.contractId).call(fn))
+        .setTimeout(30)
+        .build();
+      const sim = await server.simulateTransaction(tx);
+      if (rpc.Api.isSimulationError(sim)) throw new Error(sim.error);
+      return scValToNative(sim.result.retval);
+    }
+
+    async function refrescar() {
+      try {
+        const [lista, culpable] = await Promise.all([leer("ranking"), leer("culpable_revelado")]);
+        const medallas = ["🥇", "🥈", "🥉"];
+        $("ranking").innerHTML = lista.length
+          ? lista.map(([addr, nombre, ledger, intento], i) => `
+              <div class="row">
+                <div class="pos">${medallas[i] ?? i + 1}</div>
+                <div><div class="name">${esc(nombre)}</div><div class="meta">ledger ${ledger} · ${esc(addr.slice(0, 4))}…${esc(addr.slice(-4))}</div></div>
+                <div class="tag ${intento === 1 ? "t1" : "t2"}">${intento === 1 ? "1er intento" : "2do intento"}</div>
+              </div>`).join("")
+          : `<div class="empty">Nadie resolvió el caso todavía. ¿Quién será la primera persona?</div>`;
+        $("banner").innerHTML = culpable ? `<p class="banner">🔓 Caso cerrado. Culpable: ${esc(NOMBRES[culpable] ?? culpable)}</p>` : "";
+        $("hora").textContent = "actualizado " + new Date().toLocaleTimeString("es-PE");
+      } catch (e) {
+        $("hora").textContent = "no pude leer el RPC, reintentando… (" + e.message + ")";
+      }
+    }
+
+    (async () => {
+      cfg = await (await fetch("/config/caso.json", { cache: "no-store" })).json();
+      if (cfg.networkPassphrase !== TESTNET || !cfg.contractId) {
+        $("ranking").innerHTML = `<div class="empty">config/caso.json no apunta a una escena en testnet.</div>`;
+        return;
+      }
+      $("cid").textContent = cfg.contractId;
+      server = new rpc.Server(cfg.rpcUrl);
+      refrescar();
+      setInterval(refrescar, 5000);
+    })();
+  </script>
+</body>
+</html>

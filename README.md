@@ -48,20 +48,35 @@ mejores detectives de Arequipa: ustedes.
 | **Evento** | Un aviso que publica un contrato. Cualquiera lo puede escuchar |
 | **Stellar RPC** | El servicio con el que hablamos con la red. Lo usa la Stellar CLI por debajo |
 
+## Antes de empezar: 4 reglas de oro
+
+1. **Un comando a la vez.** Copia un comando, pégalo en la terminal, presiona **Enter** y **espera** a que
+   termine (vuelve a aparecer el símbolo `$`). Recién ahí escribe el siguiente. Si pegas varios juntos, se mezclan.
+2. **Copia los comandos tal cual.** `pnpm caso:pistas` lleva un espacio después de `pnpm` y dos puntos en medio.
+3. **Cambia lo que va entre `< >`.** Donde veas `<id>`, escribe el ID del sospechoso **sin** los signos:
+   `pnpm caso:interrogar adobo` ✅ y no `pnpm caso:interrogar <adobo>` ❌.
+4. **Lee lo que te responde la terminal.** Cada comando te explica qué pasó y cuál es el siguiente paso.
+   Los links (por ejemplo, del explorador) se abren con **Ctrl + clic** (en Mac, **Cmd + clic**).
+
 ## Cómo empezar (GitHub Codespaces)
 
-No necesitas instalar nada: todo corre en la nube.
+No necesitas instalar nada: todo corre en la nube. Solo necesitas una cuenta de GitHub.
 
-1. Inicia sesión en GitHub y haz **Fork** de este repo (botón arriba a la derecha).
-2. En **tu** fork: botón verde **Code** → pestaña **Codespaces** → **Create codespace on main**.
-3. Espera a que termine de preparar el entorno (la primera vez tarda unos minutos: compila Rust).
-4. En la terminal de abajo, corre:
+1. Inicia sesión en [github.com](https://github.com) y, en esta página, haz clic en **Fork** (arriba a la
+   derecha) y luego en **Create fork**. Ahora tienes tu propia copia del repo.
+2. En **tu** fork (verás tu usuario arriba a la izquierda): botón verde **Code** → pestaña **Codespaces** →
+   **Create codespace on main**.
+3. Se abre un editor en el navegador. **Espera** a que termine de preparar todo: la primera vez tarda unos
+   minutos porque compila Rust. Abajo verás una **terminal**. Si no la ves, abre el menú ☰ → **Terminal** →
+   **New Terminal**.
+4. En la terminal, escribe y presiona Enter:
 
 ```bash
 pnpm check
 ```
 
-Si todo sale con ✔, ¡listo! Sigue con los pasos de abajo o con la [guía del asistente](docs/guia-asistente.md).
+Debes ver todo con ✔ y una sola línea con ⏳ en **Cuenta de testnet**. Es normal: la creas en el paso 2 de abajo.
+Si ves algún ✖ en rojo, mira [Si algo falla](#si-algo-falla).
 
 <details>
 <summary><strong>¿Prefieres tu laptop?</strong> (Linux, macOS o WSL2)</summary>
@@ -82,18 +97,105 @@ En Windows recomendamos WSL2 o, más fácil, Codespaces.
 
 ## El taller, paso a paso
 
-| # | Comando | Qué pasa | Concepto |
-|---|---|---|---|
-| 1 | `pnpm check` | Revisa Rust, Stellar CLI, conexión al RPC y la escena del crimen | Entorno |
-| 2 | `pnpm setup:account` | Crea tu cuenta y la llena de XLM de testnet con Friendbot | Cuenta, llave pública y secreta |
-| 3 | Edita los 3 `TODO` de [`contracts/detective/src/lib.rs`](contracts/detective/src/lib.rs) | Tu nombre, placa y grito de cumbre | Un contrato es código |
-| 4 | `pnpm detective:ship` | Tests, compila, **despliega** tu contrato, lee tu `ficha()`, **firma** la cumbre y te registra en el caso | Desplegar, leer vs. escribir, llamada entre contratos |
-| 5 | `pnpm caso:pistas` / `pnpm caso:pista 2` | Lee las pistas | Lectura: gratis, sin firma |
-| 6 | `pnpm caso:interrogar <id>` | Interroga a un sospechoso (máximo 3) | Escritura: firma, fee, evento |
-| 7 | `pnpm caso:acusar <id>` | Acusa al culpable (máximo 2 intentos) | Reglas que aplica el contrato, hash |
-| 8 | `pnpm caso:ranking` | Mira quién resolvió el caso primero | Estado público |
+¿Quieres más detalle y preguntas para pensar? Está todo en la [guía del asistente](docs/guia-asistente.md).
 
-Otros comandos útiles:
+### Paso 1 · Revisa tu entorno
+
+```bash
+pnpm check
+```
+
+**Qué vas a ver:** una lista con ✔ y un ⏳ en "Cuenta de testnet".
+**Concepto:** tu Codespace ya tiene todo lo necesario: Rust, la Stellar CLI y conexión a la red de prueba.
+
+### Paso 2 · Crea tu cuenta
+
+```bash
+pnpm setup:account
+```
+
+**Qué vas a ver:** `✔ Cuenta lista`, con un nombre (por ejemplo `detective-x7k2`) y tu **dirección**, que empieza con `G`.
+**Concepto:** una cuenta es un par de llaves. La **pública** (tu dirección) la puede ver cualquiera. La
+**secreta** sirve para **firmar** y se guarda en tu Codespace, nunca en el repo. Friendbot te regaló XLM de
+prueba para pagar los fees.
+
+### Paso 3 · Personaliza tu contrato
+
+1. A la izquierda está el **explorador de archivos** (si no lo ves, haz clic en el ícono de las dos hojas).
+   Abre `contracts` → `detective` → `src` → **`lib.rs`**. Puede que ya esté abierto.
+2. Busca las 3 líneas que dicen `// TODO` y cambia **solo el texto entre comillas**:
+
+```rust
+pub const NOMBRE: &str = "Detective Sin Nombre";   // ← tu nombre de detective (sale en el ranking)
+pub const PLACA: &str = "AQP-000";                 // ← tu placa, por ejemplo "AQP-054"
+pub const GRITO: &str = "¡Subí al Misti y volví con hambre de queso helado!";  // ← tu grito
+```
+
+3. Guarda con **Ctrl + S** (en Mac, **Cmd + S**).
+
+No borres las comillas ni el `;` del final. El nombre puede tener hasta 32 caracteres (las tildes y la ñ cuentan doble).
+**Concepto:** un contrato inteligente es código. Lo que escribes aquí va a vivir en la blockchain.
+
+### Paso 4 · Despliega tu contrato
+
+```bash
+pnpm detective:ship
+```
+
+Tarda un poco, y no es necesario que lo entiendas todo. Fíjate en los 5 pasos que va mostrando:
+
+| Paso | Qué hace | ¿Lectura o escritura? |
+|---|---|---|
+| 1/5 | Prueba tu contrato en tu Codespace | Ninguna: no toca la red |
+| 2/5 | Lo **despliega** en testnet y te da tu `CONTRACT_ID` | ✍️ Escritura |
+| 3/5 | Lee tu ficha con `ficha()` | 📖 Lectura |
+| 4/5 | Firma el libro de la Cumbre del Misti | ✍️ Escritura |
+| 5/5 | Te registra en la Escena del Crimen | ✍️ Escritura |
+
+**Qué vas a ver al final:** `✔ Registrado como <tu nombre>`.
+**Concepto:** compara los mensajes 📖 LECTURA ("no firmaste, no pagaste fee") con los ✍️ ESCRITURA ("firmaste,
+pagaste X XLM de fee, ledger N"). Esa es la diferencia más importante del taller.
+
+### Paso 5 · Lee las pistas
+
+```bash
+pnpm caso:pistas
+```
+
+Para leer una sola pista: `pnpm caso:pista 2`.
+**Concepto:** leer es **gratis**. Léelas todas las veces que quieras.
+
+### Paso 6 · Interroga a los sospechosos (máximo 3)
+
+```bash
+pnpm caso:interrogar adobo
+```
+
+Cambia `adobo` por el ID que quieras: `rocoto`, `chicha`, `adobo`, `nevado` u `ocopa`. Elige bien: solo tienes 3.
+Para ver cuántos te quedan: `pnpm caso:estado`.
+**Concepto:** cada interrogatorio es una **escritura**. Firmas, pagas fee, el contrato cuenta tus intentos y emite
+un **evento**. Si intentas un cuarto, el contrato lo rechaza: la regla está en el código.
+
+### Paso 7 · Acusa al culpable (máximo 2 intentos)
+
+```bash
+pnpm caso:acusar <id>
+```
+
+Cambia `<id>` por el ID de tu sospechoso, sin los signos `< >`. La terminal te pregunta si estás seguro: escribe
+**`s`** y presiona Enter. Si escribes otra cosa, se cancela y no se envía nada.
+**Concepto:** el contrato no guarda el nombre del culpable, sino un **hash**. Si fallas, la transacción igual se
+confirma y el intento queda registrado.
+
+### Paso 8 · Mira el ranking
+
+```bash
+pnpm caso:ranking
+```
+
+**Concepto:** el ranking es **estado público** del contrato. Cualquiera puede leerlo, gratis.
+
+### Otros comandos útiles
 
 | Comando | Qué hace |
 |---|---|
@@ -144,6 +246,11 @@ rechaza cualquier otra firma). Todo está en [docs/guia-facilitador.md](docs/gui
 
 | Síntoma | Qué hacer |
 |---|---|
+| **`No encontré el comando "stellar"`** (o `rustc`) recién abierto el Codespace | Todavía se está preparando. Espera 1 o 2 minutos y vuelve a correr `pnpm check` |
+| **`command not found`** | Revisa que copiaste bien: `pnpm caso:pistas` (con espacio después de `pnpm`, sin `:` pegado a `pnpm`) |
+| **"Dime a quién"** o **"no es un ID válido"** | Te faltó el ID o escribiste los signos `< >`. Ejemplo correcto: `pnpm caso:interrogar adobo` |
+| **"Ese sospechoso no existe"** | Mira los IDs con `pnpm caso:sospechosos`. Van en minúsculas y sin tildes |
+| **"Cancelado. Nada se envió."** al acusar | No escribiste `s`. Vuelve a correr el comando y responde `s` |
 | **Friendbot caído** (`setup:account` no fondea, o "Account not found") | Espera un minuto y vuelve a correr `pnpm setup:account`. Tu llave ya quedó creada; solo falta el XLM. Si sigue fallando, abre `https://friendbot.stellar.org/?addr=TU_DIRECCION` en el navegador |
 | **"No pude hablar con el nodo RPC"** / `client error (Connect)` | Fue un corte de conexión. Vuelve a correr el mismo comando. Las lecturas no gastan nada; una escritura que falló no se cobró |
 | **Codespace lento** o se quedó "Building" | La primera vez compila Rust y tarda. Si pasan más de 10 minutos, recarga la pestaña. Si `pnpm detective:ship` va lento, es la compilación: ten paciencia la primera vez |

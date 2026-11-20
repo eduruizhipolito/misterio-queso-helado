@@ -24,7 +24,7 @@ Todo pasa en **testnet**: el XLM es de juguete y no cuesta nada.
 pnpm check
 ```
 
-Debes ver todo con ✔ salvo "Cuenta de testnet". Eso lo arreglamos ahora:
+Debes ver todo con ✔ y un ⏳ en "Cuenta de testnet". Eso lo arreglamos ahora:
 
 ```bash
 pnpm setup:account
@@ -47,7 +47,8 @@ Corre `pnpm check` otra vez: ahora todo debería salir con ✔.
 
 ## 1 · Calentamiento: Cumbre del Misti (min 10-22)
 
-Abre [`contracts/detective/src/lib.rs`](../contracts/detective/src/lib.rs). Es **tu** contrato.
+Abre [`contracts/detective/src/lib.rs`](../contracts/detective/src/lib.rs) desde el explorador de archivos
+de la izquierda (`contracts` → `detective` → `src` → `lib.rs`). Es **tu** contrato.
 Solo cambia las 3 líneas marcadas con `// TODO`:
 
 ```rust
@@ -61,6 +62,7 @@ pub const PLACA: &str = "AQP-000";
 pub const GRITO: &str = "¡Subí al Misti y volví con hambre de queso helado!";
 ```
 
+Cambia **solo el texto entre comillas** (no borres las comillas ni el `;`) y guarda con **Ctrl + S**.
 Tu `NOMBRE` es el que saldrá en el ranking: máximo 32 bytes (las tildes y la ñ cuentan doble).
 
 Ahora, todo de una:
@@ -141,7 +143,7 @@ pnpm caso:estado
 pnpm caso:acusar <id>
 ```
 
-Te pide confirmación porque no se puede deshacer.
+Cambia `<id>` por el ID, sin los signos `< >`. Te pide confirmación porque no se puede deshacer: escribe **`s`** y Enter.
 
 - Si aciertas, entras al ranking. Acertar al **primer** intento te pone por encima de quien acertó al segundo.
 - Si fallas, la transacción **igual se confirma**: fallar no es un error, es un resultado. Tu intento queda registrado.

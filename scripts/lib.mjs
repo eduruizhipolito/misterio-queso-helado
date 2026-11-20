@@ -108,6 +108,7 @@ export function run(cmd, args, { capture = false, allowFail = false } = {}) {
     stdio: capture ? ["inherit", "pipe", "pipe"] : "inherit",
   });
   if (res.error?.code === "ENOENT") {
+    if (allowFail) return { ok: false, stdout: "", stderr: `No encontré el comando "${cmd}".` };
     fail(`No encontré el comando "${cmd}".`, "Revisa tu instalación con: pnpm check");
   }
   const out = { ok: res.status === 0, stdout: (res.stdout ?? "").trim(), stderr: (res.stderr ?? "").trim() };

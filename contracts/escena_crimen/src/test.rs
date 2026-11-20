@@ -1,9 +1,15 @@
 extern crate std;
 
 use super::*;
+use soroban_sdk::testutils::EnvTestConfig;
 use detective::{DetectiveContract, DetectiveContractClient};
 use soroban_sdk::testutils::{Address as _, Ledger, MockAuth, MockAuthInvoke};
 use soroban_sdk::{bytesn, symbol_short, IntoVal};
+
+/// Env de pruebas sin archivos de snapshot (evita ruido en la terminal).
+fn nuevo_env() -> Env {
+    Env::new_with_config(EnvTestConfig { capture_snapshot_at_drop: false })
+}
 
 const SAL: &str = "sal-de-prueba";
 
@@ -19,7 +25,7 @@ fn s(env: &Env, t: &str) -> String {
 
 /// Despliega la escena con culpable `gama` (sospechosos de prueba, no los del caso real), 4 pistas y 5 testimonios.
 fn caso<'a>() -> Caso<'a> {
-    let env = Env::default();
+    let env = nuevo_env();
     env.mock_all_auths();
     let admin = Address::generate(&env);
     let hash = hash_de(&env, &symbol_short!("gama"), &s(&env, SAL));
@@ -51,7 +57,7 @@ fn sym(env: &Env, t: &str) -> Symbol {
 
 #[test]
 fn hash_coincide_con_sha256_fuera_de_la_cadena() {
-    let env = Env::default();
+    let env = nuevo_env();
     // node -e "crypto.createHash('sha256').update('gama'+'sal-de-prueba').digest('hex')"
     let esperado = bytesn!(&env, 0x9add17dccbe908833b9e5295c657731ed02175a455ad92eca73c0c1fe1aff4ba);
     assert_eq!(hash_de(&env, &symbol_short!("gama"), &s(&env, SAL)), esperado);

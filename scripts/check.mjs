@@ -2,7 +2,8 @@
 import { accountAddress, c, casoConfig, local, rpc, run, TESTNET } from "./lib.mjs";
 
 const checks = [];
-const check = (label, ok, hint) => checks.push({ label, ok, hint });
+// `pendiente`: algo que se hace en un paso siguiente del taller; no cuenta como error.
+const check = (label, ok, hint, pendiente = false) => checks.push({ label, ok, hint, pendiente });
 const version = (cmd, args) => {
   const res = run(cmd, args, { capture: true, allowFail: true });
   return res.ok ? res.stdout.split("\n")[0] : null;
@@ -43,7 +44,7 @@ check(
 
 const { account, detectiveId } = local.read();
 const address = account && stellar ? accountAddress(account) : null;
-check(account ? `Cuenta "${account}"` : "Cuenta de testnet", !!address, "Corre: pnpm setup:account");
+check(account ? `Cuenta "${account}"` : "Cuenta de testnet", !!address, "Siguiente paso: pnpm setup:account", true);
 
 const caso = casoConfig.read();
 check(
@@ -53,16 +54,20 @@ check(
 );
 
 console.log();
-for (const { label, ok, hint } of checks) {
-  console.log(`  ${ok ? c.green("✔") : c.red("✖")} ${label}${ok ? "" : `\n      ${c.dim(hint)}`}`);
+for (const { label, ok, hint, pendiente } of checks) {
+  const icono = ok ? c.green("✔") : pendiente ? c.yellow("⏳") : c.red("✖");
+  console.log(`  ${icono} ${label}${ok ? "" : `\n      ${c.dim(hint)}`}`);
 }
 if (detectiveId) console.log(`  ${c.green("✔")} Contrato Detective ${detectiveId.slice(0, 8)}…`);
 
-const failed = checks.filter((x) => !x.ok).length;
+const failed = checks.filter((x) => !x.ok && !x.pendiente).length;
+const pendientes = checks.filter((x) => !x.ok && x.pendiente).length;
 console.log(
   failed
-    ? `\n  ${c.yellow(`${failed} cosa(s) por arreglar.`)}\n`
-    : `\n  ${c.green("¡Todo listo, detective! Doña Nieves cuenta contigo.")}\n`,
+    ? `\n  ${c.red(`${failed} cosa(s) por arreglar.`)}\n`
+    : pendientes
+      ? `\n  ${c.green("Tu entorno está listo.")} Ahora crea tu cuenta con: ${c.bold("pnpm setup:account")}\n`
+      : `\n  ${c.green("¡Todo listo, detective! Doña Nieves cuenta contigo.")}\n`,
 );
 console.log(c.dim("  Este taller funciona SOLO en testnet: el XLM es de juguete y no vale dinero.\n"));
 process.exit(failed ? 1 : 0);

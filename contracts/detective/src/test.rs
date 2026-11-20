@@ -1,8 +1,14 @@
 extern crate std;
 
 use super::*;
+use soroban_sdk::testutils::EnvTestConfig;
 use soroban_sdk::testutils::{Address as _, MockAuth, MockAuthInvoke};
 use soroban_sdk::IntoVal;
+
+/// Env de pruebas sin archivos de snapshot (evita ruido en la terminal).
+fn nuevo_env() -> Env {
+    Env::new_with_config(EnvTestConfig { capture_snapshot_at_drop: false })
+}
 
 fn desplegar(env: &Env) -> (Address, DetectiveContractClient<'_>) {
     let dueno = Address::generate(env);
@@ -12,7 +18,7 @@ fn desplegar(env: &Env) -> (Address, DetectiveContractClient<'_>) {
 
 #[test]
 fn tu_ficha_es_valida() {
-    let env = Env::default();
+    let env = nuevo_env();
     let (dueno, detective) = desplegar(&env);
     let ficha = detective.ficha();
 
@@ -36,7 +42,7 @@ fn tu_ficha_es_valida() {
 
 #[test]
 fn firmar_cumbre_suma_uno() {
-    let env = Env::default();
+    let env = nuevo_env();
     env.mock_all_auths();
     let (_, detective) = desplegar(&env);
 
@@ -47,7 +53,7 @@ fn firmar_cumbre_suma_uno() {
 
 #[test]
 fn solo_el_dueno_firma_la_cumbre() {
-    let env = Env::default();
+    let env = nuevo_env();
     let (_, detective) = desplegar(&env);
     let intruso = Address::generate(&env);
 

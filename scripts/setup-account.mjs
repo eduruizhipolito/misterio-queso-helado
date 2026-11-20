@@ -1,13 +1,13 @@
 // pnpm setup:account [nombre]
 // Crea (o reutiliza) tu cuenta de Stellar Testnet y la llena de XLM de prueba con Friendbot.
-import { accountAddress, args, ask, c, createAccount, explorer, fail, fundAccount, local, step } from "./lib.mjs";
+import { accountAddress, args, c, createAccount, explorer, fail, fundAccount, local, step } from "./lib.mjs";
 
+// Sin preguntas: si pegas varios comandos juntos, una pregunta se "comería" el siguiente.
 const saved = local.read().account;
-const suggestion = saved ?? `detective-${Math.random().toString(36).slice(2, 6)}`;
-const name = args[0] ?? (process.stdin.isTTY ? await ask("Nombre para tu cuenta", suggestion) : suggestion);
+const name = args[0] ?? saved ?? `detective-${Math.random().toString(36).slice(2, 6)}`;
 
 if (!/^[a-z0-9_-]{1,32}$/i.test(name)) {
-  fail("Usa solo letras sin tilde, números, - y _ (máximo 32).");
+  fail("El nombre de la cuenta solo puede tener letras sin tilde, números, - y _ (máximo 32).", "Ejemplo: pnpm setup:account detective-ana");
 }
 
 let address = accountAddress(name);

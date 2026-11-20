@@ -30,7 +30,10 @@ Debes ver todo con ✔ salvo "Cuenta de testnet". Eso lo arreglamos ahora:
 pnpm setup:account
 ```
 
-Te pide un nombre para tu cuenta (puedes aceptar el que sugiere).
+Le pone un nombre a tu cuenta automáticamente (por ejemplo `detective-x7k2`). Si quieres elegirlo tú:
+`pnpm setup:account detective-ana`.
+
+> 💡 Corre los comandos **de uno en uno**: espera a que termine cada uno antes de escribir el siguiente.
 
 **Qué acaba de pasar:**
 

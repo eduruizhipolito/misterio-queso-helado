@@ -93,7 +93,7 @@ Ese comando hace 5 cosas. Mira lo que imprime en cada una:
 
 ## 2 · El misterio (min 22-50)
 
-> La noche del viernes, a las 11:40 pm, alguien entró a la **Picantería Doña Nieves** y se llevó el
+> La noche del viernes, a las 11:40 pm, alguien entró al **Restaurante Doña Nieves** y se llevó el
 > cuaderno con la **receta secreta del queso helado**, justo antes de la feria del sábado.
 
 ### Los sospechosos
@@ -107,8 +107,8 @@ pnpm caso:sospechosos
 | `rocoto` | Don Rocoto | Cocinero rival, siempre quiso la receta |
 | `chicha` | La Tía Chicha | Vecina, vende chicha de jora al lado, siempre está mirando |
 | `adobo` | El Loco Adobo | Ayudante nuevo, llegó hace una semana |
-| `nevado` | Misti Nevado | Heladero ambulante, competencia directa |
-| `ocopa` | La Sobrina Ocopa | Heredera de la picantería, ¿celos familiares? |
+| `nevado` | Señor Nevado | Heladero ambulante, competencia directa |
+| `ocopa` | La Niña Ocopa | Heredera del restaurante, ¿celos familiares? |
 
 ### Las pistas (gratis e ilimitadas)
 

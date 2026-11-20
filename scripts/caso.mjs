@@ -28,8 +28,8 @@ const PERSONAJES = {
   rocoto: "Don Rocoto",
   chicha: "La Tía Chicha",
   adobo: "El Loco Adobo",
-  nevado: "Misti Nevado",
-  ocopa: "La Sobrina Ocopa",
+  nevado: "Señor Nevado",
+  ocopa: "La Niña Ocopa",
 };
 const nombreDe = (id) => PERSONAJES[id] ?? id;
 

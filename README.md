@@ -11,17 +11,17 @@ todo en la blockchain de Stellar.
 
 ## La historia
 
-La noche del viernes, a las 11:40 pm, alguien entró a la **Picantería Doña Nieves** y se llevó el cuaderno
+La noche del viernes, a las 11:40 pm, alguien entró al **Restaurante Doña Nieves** y se llevó el cuaderno
 con la **receta secreta del queso helado**, justo antes de la feria del sábado. Doña Nieves contrató a los
-mejores detectives de Arequipa: ustedes.
+mejores detectives de la ciudad: ustedes.
 
 | ID | Sospechoso | Por qué es sospechoso |
 |---|---|---|
 | `rocoto` | Don Rocoto | Cocinero rival, siempre quiso la receta |
 | `chicha` | La Tía Chicha | Vecina, vende chicha de jora al lado, siempre está mirando |
 | `adobo` | El Loco Adobo | Ayudante nuevo, llegó hace una semana |
-| `nevado` | Misti Nevado | Heladero ambulante, competencia directa |
-| `ocopa` | La Sobrina Ocopa | Heredera de la picantería, ¿celos familiares? |
+| `nevado` | Señor Nevado | Heladero ambulante, competencia directa |
+| `ocopa` | La Niña Ocopa | Heredera del restaurante, ¿celos familiares? |
 
 ## Lo que vas a aprender
 

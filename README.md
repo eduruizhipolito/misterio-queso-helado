@@ -19,7 +19,7 @@ mejores detectives de Arequipa: ustedes.
 |---|---|---|
 | `rocoto` | Don Rocoto | Cocinero rival, siempre quiso la receta |
 | `chicha` | La Tía Chicha | Vecina, vende chicha de jora al lado, siempre está mirando |
-| `adobo` | El Cholo Adobo | Ayudante nuevo, llegó hace una semana |
+| `adobo` | El Loco Adobo | Ayudante nuevo, llegó hace una semana |
 | `nevado` | Misti Nevado | Heladero ambulante, competencia directa |
 | `ocopa` | La Sobrina Ocopa | Heredera de la picantería, ¿celos familiares? |
 

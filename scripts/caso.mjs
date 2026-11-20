@@ -27,7 +27,7 @@ import {
 const PERSONAJES = {
   rocoto: "Don Rocoto",
   chicha: "La Tía Chicha",
-  adobo: "El Cholo Adobo",
+  adobo: "El Loco Adobo",
   nevado: "Misti Nevado",
   ocopa: "La Sobrina Ocopa",
 };
